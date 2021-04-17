@@ -1,10 +1,10 @@
 import csv
 import pyperclip
-from input import required
 from write_to_file import write
 from read_from_file import read
 from encrypt import encrypt
 from decrypt import decrypt
+from decorators import input_
 
 print('1. Save' +
       '\t\t2. Update' +
@@ -16,22 +16,22 @@ option = input()
 
 if option == '1':
     # save
-    title = required('Enter title: ')
+    title = input_('Enter title: ')
     for row in read('passwords.csv'):
         if row[0] == title:
             print('title already exists!')
             break
     else:
-        url = required('Enter url: ')
-        username = required('Enter username: ')
-        password = encrypt(input('Enter key: '), required('Enter password: '))
+        url = input_('Enter url: ')
+        username = input_('Enter username: ')
+        password = encrypt(input_('Enter key: '), input_('Enter password: '))
 
         write('passwords.csv', 'a+', [[title, url, username, password]])
 
 
 elif option == '2':
     # update
-    title = required('Enter title: ')
+    title = input('Enter title: ')
     file_content = read('passwords.csv')
     for row in file_content:
         if row[0] == title:
@@ -47,7 +47,7 @@ elif option == '2':
             change_password = input('Wanna change password?(y/n) ')
             if change_password == 'y':
                 row[3] = password = encrypt(
-                    input('Enter key: '), required('Enter new password: '))
+                    input('Enter key: '), input('Enter new password: '))
             if 'y' in (change_title, change_url, change_username, change_password):
                 write('passwords.csv', 'w', file_content)
                 print('Changes saved successfully!')
